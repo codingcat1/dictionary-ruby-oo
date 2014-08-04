@@ -1,4 +1,6 @@
 require './lib/term'
+require './lib/word'
+require './lib/definition'
 require 'pry'
 
 @current_term = nil
@@ -12,7 +14,7 @@ def main_menu
     puts "Press 'x' to exit"
     main_choice = gets.chomp
     if main_choice == 'n'
-      new_word
+      new_word_ui
     elsif main_choice == 'l'
       list_words
     elsif main_choice == 's'
@@ -24,13 +26,19 @@ def main_menu
   end
 end
 
-def new_word
+def new_word_ui
   puts "*** New Word ***"
   puts "Please enter in the new word you'd like to add"
   word_user_input = gets.chomp
+  puts "Please enter the language of the word"
+  language_user_input = gets.chomp
+  new_word = Word.new(word_user_input, language_user_input)
   puts "Please enter the definition of the word"
   definition_user_input = gets.chomp
-  Term.new(word_user_input, definition_user_input).save
+  puts "Please enter the language of the definition"
+  language_user_input = gets.chomp
+  new_definition = Definition.new(definition_user_input, language_user_input)
+  Term.new(new_word, new_definition).save
   Term.all.each do |term|
     @current_term = term
   end
@@ -40,7 +48,7 @@ end
 def list_words
   puts "*** Word List ***"
   Term.all.each_with_index do |term, index|
-  puts "#{index+1}. " + term.word.to_s + ": " + term.definition.to_s
+  puts "#{index+1}. " + term.word.word + " - " + term.word.language + ": " + term.definition.definition + " - " + term.definition.language
   @word_number = "#{index+1}"
   end
 
@@ -58,8 +66,8 @@ def list_words
     end
   end
 
-  puts "Word: " + @current_term.word.to_s
-  puts "Definition: " + @current_term.definition.to_s
+  puts "Word: " + @current_term.word.word
+  puts "Definition: " + @current_term.definition.definition
   puts "Press 'w' to edit the word or 'd' to edit the definition"
   puts "Press '+w' to add another word to an existing term"
   puts "Press '+d' to add another definition"
@@ -68,12 +76,12 @@ def list_words
   if main_choice == 'w'
     puts "Please enter the new word"
     edited_word = gets.chomp
-    @current_term.edit_word(edited_word)
-    puts @current_term.word.to_s
+    @current_term.word.edit_word(edited_word)
+    puts @current_term.word
   elsif main_choice == 'd'
     puts "Please enter in the new definition"
     edited_definition = gets.chomp
-    @current_term.edit_definition(edited_definition)
+    @current_term.definition.edit_definition(edited_definition)
     puts @current_term.definition.to_s
   elsif main_choice == '+w'
     add_word_ui
@@ -88,7 +96,10 @@ end
 def add_word_ui
   puts "Type in the additional word"
   user_add_word = gets.chomp
-  @current_term.add_word(user_add_word)
+  puts "Enter the language"
+  user_language = gets.chomp
+  new_word = Word.new(user_add_word, user_language)
+  @current_term.add_word(new_word)
   puts "Word added!"
   puts @current_term.word.to_s
 end
@@ -97,9 +108,13 @@ end
 def add_definition_ui
   puts "Type in the additional definition"
   user_add_definition = gets.chomp
-  @current_term.add_definition(user_add_definition)
+  puts "Type in the language of the definition"
+  user_definition_language = gets.chomp
+  new_definition = Definition.new(user_add_definition, user_definition_language)
+  binding.pry
+  @current_term.add_definition(new_definition)
   puts "Definition added!"
-  puts @current_term.definition.to_s
+  puts @current_term.definition.definition
 end
 
 def remove_word
