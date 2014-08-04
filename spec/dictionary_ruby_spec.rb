@@ -10,6 +10,10 @@ describe Term do
   it 'shows the user the term they initialized' do
     test_term = Term.new('carrot', 'A delicious vegetable.')
     test_term.word.should eq 'carrot'
+  end
+
+  it 'shows the user the definition of the term they initialized' do
+    test_term = Term.new('carrot', 'A delicious vegetable.')
     test_term.definition.should eq 'A delicious vegetable.'
   end
 end
