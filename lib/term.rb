@@ -2,8 +2,8 @@ class Term
   @@all_terms = []
 
   def initialize(word, definition)
-    @word = word
-    @definition = definition
+    @word = [word]
+    @definition = [definition]
   end
 
   def word
@@ -20,6 +20,10 @@ class Term
 
   def add_definition(definition)
     @definition << definition
+  end
+
+  def add_word(word)
+    @word << word
   end
 
   def definition

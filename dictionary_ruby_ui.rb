@@ -40,7 +40,7 @@ end
 def list_words
   puts "*** Word List ***"
   Term.all.each_with_index do |term, index|
-  puts "#{index+1}. " + term.word + ": " + term.definition
+  puts "#{index+1}. " + term.word.to_s + ": " + term.definition.to_s
   @word_number = "#{index+1}"
   end
 
@@ -58,31 +58,54 @@ def list_words
     end
   end
 
-  puts "Word: " + @current_term.word
-  puts "Definition: " + @current_term.definition
+  puts "Word: " + @current_term.word.to_s
+  puts "Definition: " + @current_term.definition.to_s
   puts "Press 'w' to edit the word or 'd' to edit the definition"
+  puts "Press '+w' to add another word to an existing term"
+  puts "Press '+d' to add another definition"
   puts "Press 'x' to return to the previous menu"
   main_choice = gets.chomp
   if main_choice == 'w'
     puts "Please enter the new word"
     edited_word = gets.chomp
     @current_term.edit_word(edited_word)
-    puts @current_term.word
+    puts @current_term.word.to_s
   elsif main_choice == 'd'
     puts "Please enter in the new definition"
     edited_definition = gets.chomp
     @current_term.edit_definition(edited_definition)
-    puts @current_term.definition
+    puts @current_term.definition.to_s
+  elsif main_choice == '+w'
+    add_word_ui
+  elsif main_choice == '+d'
+    add_definition_ui
   elsif main_choice == 'x'
     list_words
   end
   list_words
 end
 
+def add_word_ui
+  puts "Type in the additional word"
+  user_add_word = gets.chomp
+  @current_term.add_word(user_add_word)
+  puts "Word added!"
+  puts @current_term.word.to_s
+end
+
+
+def add_definition_ui
+  puts "Type in the additional definition"
+  user_add_definition = gets.chomp
+  @current_term.add_definition(user_add_definition)
+  puts "Definition added!"
+  puts @current_term.definition.to_s
+end
+
 def remove_word
   puts "*** Remove Word ***"
   Term.all.each_with_index do |term, index|
-  puts "#{index+1}. " + term.word + ": " + term.definition
+  puts "#{index+1}. " + term.word.to_s + ": " + term.definition.to_s
   @word_number = "#{index+1}"
   end
   puts "Press the number of word that you would like to remove"
