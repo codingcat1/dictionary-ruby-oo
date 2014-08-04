@@ -34,5 +34,9 @@ class Term
     @@all_terms
   end
 
+  def search(word_search)
+    @@all_terms.word
+  end
+
 
 end
