@@ -31,7 +31,6 @@ def new_word
   puts "Please enter the definition of the word"
   definition_user_input = gets.chomp
   Term.new(word_user_input, definition_user_input).save
-  binding.pry
   Term.all.each do |term|
     @current_term = term
   end
@@ -105,15 +104,9 @@ def search_word
   if search_word_input == 'x'
     main_menu
   else
-    Term.all.each do |term|
-      @current_term = term
-      @current_word = term.word
-      if search_word_input = @current_word
-        puts @current_term.word + ": " + @current_term.definition + "\n\n"
-      end
-    end
-    search_word
+    Term.search(search_word_input)
   end
+    search_word
 end
 
 main_menu

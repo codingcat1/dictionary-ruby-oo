@@ -34,8 +34,12 @@ class Term
     @@all_terms
   end
 
-  def search(word_search)
-    @@all_terms.word
+  def Term.search(word_search)
+    @@all_terms.each do |term|
+      if word_search = term.word
+        puts term.word + ": " + term.definition + "\n\n"
+      end
+    end
   end
 
 
